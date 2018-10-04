@@ -15,18 +15,20 @@ function err() {
 
 function log()
 {
-    local buff=""
+    local _buff=""
+    local _logTarg=""
 
-    if [ $1 -eq 1 ]; then
-        buff="ERROR"
-    else
-        buff="INFO "
-    fi
+    if [[ -z $forceLog ]]; then _logTarg="${workDir}${log_dir}"
+    else _logTarg="${forceLog}"; fi
 
-    buff="[${buff}]:$(date '+%H%M%S-%d%m%y'): ${2}"
+    if [ $1 -eq 1 ]; then _buff="ERROR"
+    else _buff="INFO "; fi
 
-    if ! $quietMode; then echo "${buff}"; fi
-    echo "${buff}" >> ${workDir}${log_dir}/gitRabbit.log
+    _buff="[${_buff}]:$(date '+%H%M%S-%d%m%y'): ${2}"
+
+    if ! $quietMode; then echo "${_buff}"; fi
+    echo "${_buff}" >> "${_logTarg}/gitRabbit.log"
+
     return ${1}
 }
 
@@ -54,6 +56,10 @@ function parsing_args()
                 shift
                 workDir="$1"
                 ;;
+            "-l")
+                shift
+                forceLog="$1"
+                ;;
             *)
                 echo "Unknown option -- $1"
                 help
@@ -80,4 +86,5 @@ lapereaux=()
 
 # MAIN
 parsing_args $@
-exit 1
+log 0 "toto"
+exit 0
