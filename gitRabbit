@@ -2,10 +2,12 @@
 # Copyright 2018 Iglou.eu
 # Copyright 2018 Adrien Kara
 # license that can be found in the LICENSE file.
+# SIG TRAP
+trap "quit" 2 3
 
 # TMPCONF
 USER="adrien"
-WORK_DIR="/tmp"
+WORK_DIR="/tmp/gitRabbit"
 
 # FUNCTIONS
 function err() {
@@ -13,23 +15,26 @@ function err() {
     exit 1
 }
 
+function quit()
+{
+    log 0 "Program Termination"
+    exit 0
+}
+
 function log()
 {
     local _buff=""
     local _logTarg=""
 
-    if [[ -z $forceLog ]]; then _logTarg="${workDir}${log_dir}"
-    else _logTarg="${forceLog}"; fi
-
     if [ $1 -eq 1 ]; then _buff="ERROR"
     else _buff="INFO "; fi
 
-    _buff="[${_buff}]:$(date '+%H%M%S-%d%m%y'): ${2}"
+    _buff="[${_buff}] $(date '+%H%M%S-%d%m%y'): ${2}"
 
     if ! $quietMode; then echo "${_buff}"; fi
-    echo "${_buff}" >> "${_logTarg}/gitRabbit.log"
+    echo "${_buff}" >> "${logFile}"
 
-    return ${1}
+    return $1
 }
 
 function help()
@@ -46,7 +51,7 @@ function parsing_args()
                 ;;
             "-c")
                 shift
-                confFile="$1"
+                forceConf="$1"
                 ;;
             "-u")
                 shift
@@ -60,6 +65,10 @@ function parsing_args()
                 shift
                 forceLog="$1"
                 ;;
+            "-s")
+                shift
+                sleepTime="$1"
+                ;;
             *)
                 echo "Unknown option -- $1"
                 help
@@ -71,20 +80,89 @@ function parsing_args()
     done
 }
 
-function parsing_conf()
+function init_dir()
 {
-    return 0
+    eval $1="${!1%%/}"
+    local _dir=${!1}
+    local _buff="${_dir%/*}"
+
+    if [[ -e $_dir ]]; then
+        if [[ -w $_dir ]]; then return 0
+        else err "Unable to write to ${_dir}"; fi
+    fi
+
+    if [[ -w $_buff ]]; then
+        mkdir -p "$_dir"
+        return 0
+    else
+        err "Unable to write ${_dir#*/} in ${_buff:-/}"
+    fi
+}
+
+function init_log()
+{
+    logFile="${logDir}${logFile}"
+    if [[ ! -r $logFile ]]; then touch "$logFile"; fi
+
+    echo ""                                >> "${logFile}"
+    echo "########## gitRabbit ##########" >> "${logFile}"
+    echo "Started at : $(date)"            >> "${logFile}"
+    echo "Working dir: ${workDir}"         >> "${logFile}"
+    echo "Config file: ${confFile}"        >> "${logFile}"
+    echo "Log file   : ${logFile}"         >> "${logFile}"
+    echo "---"                             >> "${logFile}"
+
+    if ! $quietMode; then cat "${logFile}"; fi
+}
+
+function init_gitRabbit()
+{
+    if [[ -z $forceLog ]]; then logDir="${workDir}${logDir}"
+    else logDir="${forceLog}"; forceLog=""; fi
+
+    if [[ -z $forceConf ]]; then confFile="${workDir}${confFile}"
+    else confFile="${forceConf}"; forceConf=""; fi
+
+    init_dir "workDir"
+    init_dir "logDir"
+
+    init_log
+    init_conf
+}
+
+function init_conf()
+{
+    if [[ ! -r $confFile ]]; then
+        if [[ -w ${confFile%/*} ]]; then touch "$confFile"
+        else err "Unable to write conf file ${confFile}"; fi
+    fi
+
+    . "$confFile"
+    if [ $? -eq 0 ]; then log 0 "Config file sourced (${confFile})"
+    else log 0 "Fail to source ${confFile}"; fi
+}
+
+function loop_gitRabbit()
+{
+    while :
+    do
+        sleep 1
+    done
 }
 
 # VARS
 workDir="${WORK_DIR}"
 logDir="/log"
-confFile=""
+logFile="/gitRabbit.log"
+confFile="/lapereaux.conf"
 quietMode="false"
 forceUser="false"
+sleepTime="60"
 lapereaux=()
 
 # MAIN
 parsing_args $@
-log 0 "toto"
+init_gitRabbit
+loop_gitRabbit
+
 exit 0
