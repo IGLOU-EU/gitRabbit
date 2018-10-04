@@ -3,8 +3,81 @@
 # Copyright 2018 Adrien Kara
 # license that can be found in the LICENSE file.
 
-# CONFIG
+# TMPCONF
+USER="adrien"
+WORK_DIR="/tmp"
 
 # FUNCTIONS
+function err() {
+    echo "FATAL ERROR: ${1}"
+    exit 1
+}
+
+function log()
+{
+    local buff=""
+
+    if [ $1 -eq 1 ]; then
+        buff="ERROR"
+    else
+        buff="INFO "
+    fi
+
+    buff="[${buff}]:$(date '+%H%M%S-%d%m%y'): ${2}"
+
+    if ! $quietMode; then echo "${buff}"; fi
+    echo "${buff}" >> ${workDir}${log_dir}/gitRabbit.log
+    return ${1}
+}
+
+function help()
+{
+    echo "help"
+}
+
+function parsing_args()
+{
+    while [ $# -ne 0 ]; do
+        case "$1" in
+            "-q")
+                quietMode="true"
+                ;;
+            "-c")
+                shift
+                confFile="$1"
+                ;;
+            "-u")
+                shift
+                forceUser="$1"
+                ;;
+            "-w")
+                shift
+                workDir="$1"
+                ;;
+            *)
+                echo "Unknown option -- $1"
+                help
+                exit 1
+                ;;
+        esac
+
+        shift
+    done
+}
+
+function parsing_conf()
+{
+    return 0
+}
+
+# VARS
+workDir="${WORK_DIR}"
+logDir="/log"
+confFile=""
+quietMode="false"
+forceUser="false"
+lapereaux=()
 
 # MAIN
+parsing_args $@
+exit 1
