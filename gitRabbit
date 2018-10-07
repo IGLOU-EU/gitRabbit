@@ -165,8 +165,13 @@ function init_lapereaux()
             if [ $? -eq 0 ]; then _status=true; fi
         else
             _var="${lapinou}_url"
-            _buff="$(git clone --depth 1 ${!_var:-empty_url} ${_lapDir} 2>&1)"
-            if [ $? -eq 0 ]; then _status=true; fi
+            _var="${!_var:-empty_url}"
+            _buff="$(git clone --depth 1 ${_var} ${_lapDir} 2>&1)"
+
+            if [ $? -eq 0 ]; then
+                _status=true
+                log 0 "Clone ${lapinou} repository from ${_var}"
+            fi
         fi
 
         if ! $_status; then
