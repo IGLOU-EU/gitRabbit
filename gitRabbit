@@ -164,9 +164,12 @@ function init_lapereaux()
             _buff="$(git status 2>&1)"
             if [ $? -eq 0 ]; then _status=true; fi
         else
+            _var="${lapinou}_branch"
+            _buff="-b ${!_var:-master}"
             _var="${lapinou}_url"
             _var="${!_var:-empty_url}"
-            _buff="$(git clone --depth 1 ${_var} ${_lapDir} 2>&1)"
+            _buff="${_buff} ${_var}"
+            _buff="$(git clone --depth 1 ${_buff} ${_lapDir} 2>&1)"
 
             if [ $? -eq 0 ]; then
                 _status=true
@@ -187,36 +190,52 @@ function init_lapereaux()
 
     _buff="${_checked[@]}"
     lapereaux=("${_checked[@]}")
-    log 0 "Validates lapereaux: ${_buff}"
+    log 0 "Validates lapereaux: \"${_buff}\""
 }
 
 function lapereaux_check()
 {
     local _var=""
     local _buff=""
-    local _status=false
     local _lapDir=""
+    local _status=false
 
     for lapinou in ${lapereaux[@]}
     do
         _lapDir="${workDir}/${lapinou}"
         cd "${_lapDir}"
 
-        # check up to date
-         # if clean
-         # log 0 nothing to do
-         # continue
+        _buff="$(git fetch origin 2>&1)"
+        if [ $? -ne 0 ]; then
+            log 1 "Repository \"${lapinou}\" can't fetch"
+            log 1 "${_buff}"
+            continue
+        fi
 
-        # check beforeupdate var exist
-         # exec it
+        # can "git log HEAD..origin/master --oneline"
+        _buff="$(git checkout | grep "git pull" 2>&1)"
+        if [[ $_buff = "" ]]; then
+            log 0 "Repository \"${lapinou}\" nothing to do"
+            continue
+        fi
 
-        # update repos
-         # if error report
+        _var="${lapinou}_before"
+        if [[ ! -z ${!_var} ]]; then eval ${!_var}; fi
 
-        # check postupdate var exist
-         # exec it
+        _var="${lapinou}_branch"
+        _var="${!_var:-master}"
+        _buff="$(git reset --hard origin/${_var} 2>&1)"
+        if [ $? -eq 0 ]; then _status="true"; fi
 
-        # log 0 repos updated
+        _var="${lapinou}_after"
+        if [[ ! -z ${!_var} ]]; then eval ${!_var}; fi
+
+        if $_status; then
+            log 0 "Repository \"${lapinou}\" updated"
+        else
+            log 1 "Fail to update \"${lapinou}\" repository"
+            log 1 "${_buff}"
+        fi
     done
 }
 
