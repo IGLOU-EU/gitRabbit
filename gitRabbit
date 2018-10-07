@@ -26,6 +26,8 @@ function log()
     local _buff=""
     local _logTarg=""
 
+    #if quietlog and $1 = 0, return $1
+
     if [ $1 -eq 1 ]; then _buff="ERROR"
     else _buff="INFO "; fi
 
@@ -128,6 +130,7 @@ function init_gitRabbit()
 
     init_log
     init_conf
+    init_lapereaux
 }
 
 function init_conf()
@@ -139,14 +142,57 @@ function init_conf()
 
     . "$confFile"
     if [ $? -eq 0 ]; then log 0 "Config file sourced (${confFile})"
-    else log 0 "Fail to source ${confFile}"; fi
+    else err "Fail to source ${confFile}"; fi
+
+    if [[ -z $lapereaux ]]; then err "No \"lapereaux\" defined in ${confFile}"; fi
 }
 
-function loop_gitRabbit()
+function init_lapereaux()
+{
+    local _var=""
+    local _buff=""
+    local _status=false
+    local _lapDir=""
+    local _checked=()
+
+    for lapinou in ${lapereaux[@]}
+    do
+        _lapDir="${workDir}/${lapinou}"
+
+        if [[ -w $_lapDir ]]; then
+            cd "${_lapDir}"
+            _buff="$(git status 2>&1)"
+            if [ $? -eq 0 ]; then _status=true; fi
+        else
+            _var="${lapinou}_url"
+            _buff="$(git clone --depth 1 ${!_var:-empty_url} ${_lapDir} 2>&1)"
+            if [ $? -eq 0 ]; then _status=true; fi
+        fi
+
+        if ! $_status; then
+            log 1 "Can't clone or use \"${lapinou}\""
+            log 1 "${_buff}"
+            continue
+        else
+            _status=false
+        fi
+
+        _checked+=("$lapinou")
+    done
+
+    _buff="${_checked[@]}"
+    lapereaux=("${_checked[@]}")
+    log 0 "Validates lapereaux: ${_buff}"
+}
+
+function working_loop()
 {
     while :
     do
-        sleep 1
+        #lapereaux
+        log 0 "End of a lapereaux turn"
+
+        sleep $sleepTime
     done
 }
 
@@ -163,6 +209,5 @@ lapereaux=()
 # MAIN
 parsing_args $@
 init_gitRabbit
-loop_gitRabbit
-
-exit 0
+working_loop
+quit
