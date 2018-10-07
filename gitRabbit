@@ -190,11 +190,41 @@ function init_lapereaux()
     log 0 "Validates lapereaux: ${_buff}"
 }
 
+function lapereaux_check()
+{
+    local _var=""
+    local _buff=""
+    local _status=false
+    local _lapDir=""
+
+    for lapinou in ${lapereaux[@]}
+    do
+        _lapDir="${workDir}/${lapinou}"
+        cd "${_lapDir}"
+
+        # check up to date
+         # if clean
+         # log 0 nothing to do
+         # continue
+
+        # check beforeupdate var exist
+         # exec it
+
+        # update repos
+         # if error report
+
+        # check postupdate var exist
+         # exec it
+
+        # log 0 repos updated
+    done
+}
+
 function working_loop()
 {
     while :
     do
-        #lapereaux
+        lapereaux_check
         log 0 "End of a lapereaux turn"
 
         sleep $sleepTime
