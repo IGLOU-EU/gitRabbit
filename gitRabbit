@@ -97,14 +97,14 @@ function init_dir()
 
     if [[ -e $_dir ]]; then
         if [[ -w $_dir ]]; then return 0
-        else err "Unable to write to ${_dir}"; fi
+        else err "Unable to write to '${_dir}'"; fi
     fi
 
     if [[ -w $_buff ]]; then
         mkdir -p "$_dir"
         return 0
     else
-        err "Unable to write ${_dir#*/} in ${_buff:-/}"
+        err "Unable to write '${_dir#*/}' in '${_buff:-/}'"
     fi
 }
 
@@ -113,13 +113,13 @@ function init_log()
     logFile="${logDir}${logFile}"
     if [[ ! -r $logFile ]]; then touch "$logFile"; fi
 
-    echo ""                                >> "${logFile}"
-    echo "########## gitRabbit ##########" >> "${logFile}"
-    echo "Started at : $(date)"            >> "${logFile}"
-    echo "Working dir: ${workDir}"         >> "${logFile}"
-    echo "Config file: ${confFile}"        >> "${logFile}"
-    echo "Log file   : ${logFile}"         >> "${logFile}"
-    echo "---"                             >> "${logFile}"
+    echo ""                                  >> "${logFile}"
+    echo "########## gitRabbit ##########"   >> "${logFile}"
+    echo "Started at : '$(date)'"            >> "${logFile}"
+    echo "Working dir: '${workDir}'"         >> "${logFile}"
+    echo "Config file: '${confFile}'"        >> "${logFile}"
+    echo "Log file   : '${logFile}'"         >> "${logFile}"
+    echo "---"                               >> "${logFile}"
 
     if ! $quietMode; then cat "${logFile}"; fi
 }
@@ -137,6 +137,11 @@ function init_gitRabbit()
 
     init_log
     init_conf
+
+    if [[ ! -z $forceUser ]] && [[ $forceUser != $USER ]]; then
+        err "Expect user '${forceUser}' but current user is: '${USER}'"
+    fi
+
     init_lapereaux
 }
 
@@ -144,14 +149,14 @@ function init_conf()
 {
     if [[ ! -r $confFile ]]; then
         if [[ -w ${confFile%/*} ]]; then touch "$confFile"
-        else err "Unable to write conf file ${confFile}"; fi
+        else err "Unable to write conf file '${confFile}'"; fi
     fi
 
     . "$confFile"
-    if [ $? -eq 0 ]; then log 0 "Config file sourced (${confFile})"
-    else err "Fail to source ${confFile}"; fi
+    if [ $? -eq 0 ]; then log 0 "Config file sourced '${confFile}'"
+    else err "Fail to source '${confFile}'"; fi
 
-    if [[ -z $lapereaux ]]; then err "No \"lapereaux\" defined in ${confFile}"; fi
+    if [[ -z $lapereaux ]]; then err "No lapereaux defined in '${confFile}'"; fi
 }
 
 function init_lapereaux()
@@ -169,8 +174,8 @@ function init_lapereaux()
         _var="${lapinou}_remove"
         if ${!_var:-false}; then
             _buff="$(rm -rf ${_lapDir} 2>&1)"
-            if [ $? -eq 0 ]; then log -1 "Repository ${lapinou} removed"
-            else log 1 "Can't remove ${lapinou}"; log 1 "${_buff}"; fi
+            if [ $? -eq 0 ]; then log -1 "Repository '${lapinou}' removed"
+            else log 1 "Can't remove '${lapinou}'"; log 1 "${_buff}"; fi
             continue
         fi
 
@@ -188,12 +193,12 @@ function init_lapereaux()
 
             if [ $? -eq 0 ]; then
                 _status=true
-                log -1 "Clone ${lapinou} repository from ${_var}"
+                log -1 "Clone '${lapinou}' repository from '${_var}'"
             fi
         fi
 
         if ! $_status; then
-            log 1 "Can't clone or use \"${lapinou}\""
+            log 1 "Can't clone or use '${lapinou}'"
             log 1 "${_buff}"
             continue
         else
@@ -205,7 +210,7 @@ function init_lapereaux()
 
     _buff="${_checked[@]}"
     lapereaux=("${_checked[@]}")
-    log 0 "Validates lapereaux: \"${_buff}\""
+    log 0 "Validates lapereaux: '${_buff}'"
 }
 
 function lapereaux_check()
@@ -222,7 +227,7 @@ function lapereaux_check()
 
         _buff="$(git fetch origin 2>&1)"
         if [ $? -ne 0 ]; then
-            log 1 "Repository \"${lapinou}\" can't fetch"
+            log 1 "Repository '${lapinou}' can't fetch"
             log 1 "${_buff}"
             continue
         fi
@@ -230,7 +235,7 @@ function lapereaux_check()
         # can "git log HEAD..origin/master --oneline"
         _buff="$(git checkout | grep "git pull" 2>&1)"
         if [[ $_buff = "" ]]; then
-            log 0 "Repository \"${lapinou}\" nothing to do"
+            log 0 "Repository '${lapinou}' nothing to do"
             continue
         fi
 
@@ -241,14 +246,15 @@ function lapereaux_check()
         _var="${!_var:-master}"
         _buff="$(git reset --hard origin/${_var} 2>&1)"
         if [ $? -eq 0 ]; then _status="true"; fi
+        # clean ...
 
         _var="${lapinou}_after"
         if [[ ! -z ${!_var} ]]; then eval ${!_var}; fi
 
         if $_status; then
-            log 0 "Repository \"${lapinou}\" updated"
+            log 0 "Repository '${lapinou}' updated"
         else
-            log 1 "Fail to update \"${lapinou}\" repository"
+            log 1 "Fail to update '${lapinou}' repository"
             log 1 "${_buff}"
         fi
     done
@@ -267,13 +273,14 @@ function working_loop()
 
 # VARS
 logDir="/log"
-tinyLog=0
 workDir="${WORK_DIR}"
 logFile="/gitRabbit.log"
 confFile="/lapereaux.conf"
-quietMode="false"
-forceUser="false"
+
+tinyLog=0
+forceUser=""
 sleepTime="60"
+quietMode="false"
 lapereaux=()
 
 # MAIN
