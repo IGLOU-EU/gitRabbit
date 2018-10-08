@@ -246,7 +246,7 @@ function lapereaux_check()
         _var="${!_var:-master}"
         _buff="$(git reset --hard origin/${_var} 2>&1)"
         if [ $? -eq 0 ]; then _status="true"; fi
-        # clean ...
+        git clean -fd # Don't forget to add datas files to git ignore ...
 
         _var="${lapinou}_after"
         if [[ ! -z ${!_var} ]]; then eval ${!_var}; fi
