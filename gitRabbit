@@ -42,7 +42,27 @@ function log()
 
 function help()
 {
-    echo "help"
+    echo "usage : gitRabbit [-q] [-c <path>] [-u <user>] [-w <path>]
+                  [-l <path>] [-s <time>] [-t|-tt]
+
+    -q        Show information only from fatal error operations
+
+    -c        Specify an alternate configuration file
+
+    -u        Specify user for more secure operations
+              This should be a dedicated system account
+              Incorrect entry cause not start
+
+    -w        Path for storing all data,
+              it must be an absolute path
+
+    -l        Specify an alternate log file
+
+    -s        Time before re-check all repository
+
+    -t, -tt   Print less information in log
+              Specify this option twice(-tt) to only print error
+    "
 }
 
 function parsing_args()
