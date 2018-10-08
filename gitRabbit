@@ -159,6 +159,14 @@ function init_lapereaux()
     do
         _lapDir="${workDir}/${lapinou}"
 
+        _var="${lapinou}_remove"
+        if ${!_var:-false}; then
+            _buff="$(rm -rf ${_lapDir} 2>&1)"
+            if [ $? -eq 0 ]; then log 0 "Repository ${lapinou} removed"
+            else log 1 "Can't remove ${lapinou}"; log 1 "${_buff}"; fi
+            continue
+        fi
+
         if [[ -w $_lapDir ]]; then
             cd "${_lapDir}"
             _buff="$(git status 2>&1)"
