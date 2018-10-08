@@ -17,7 +17,7 @@ function err() {
 
 function quit()
 {
-    log 0 "Program Termination"
+    log -1 "Program Termination"
     exit 0
 }
 
@@ -26,7 +26,8 @@ function log()
     local _buff=""
     local _logTarg=""
 
-    #if quietlog and $1 = 0, return $1
+    if [ $tinyLog -ne 0 ] && [ $1 -eq 0 ]; then return 0; fi
+    if [ $tinyLog -eq 2 ] && [ $1 -eq -1 ]; then return 0; fi
 
     if [ $1 -eq 1 ]; then _buff="ERROR"
     else _buff="INFO "; fi
@@ -70,6 +71,12 @@ function parsing_args()
             "-s")
                 shift
                 sleepTime="$1"
+                ;;
+            "-t")
+                tinyLog=1
+                ;;
+            "-tt")
+                tinyLog=2
                 ;;
             *)
                 echo "Unknown option -- $1"
@@ -162,7 +169,7 @@ function init_lapereaux()
         _var="${lapinou}_remove"
         if ${!_var:-false}; then
             _buff="$(rm -rf ${_lapDir} 2>&1)"
-            if [ $? -eq 0 ]; then log 0 "Repository ${lapinou} removed"
+            if [ $? -eq 0 ]; then log -1 "Repository ${lapinou} removed"
             else log 1 "Can't remove ${lapinou}"; log 1 "${_buff}"; fi
             continue
         fi
@@ -181,7 +188,7 @@ function init_lapereaux()
 
             if [ $? -eq 0 ]; then
                 _status=true
-                log 0 "Clone ${lapinou} repository from ${_var}"
+                log -1 "Clone ${lapinou} repository from ${_var}"
             fi
         fi
 
@@ -259,8 +266,9 @@ function working_loop()
 }
 
 # VARS
-workDir="${WORK_DIR}"
 logDir="/log"
+tinyLog=0
+workDir="${WORK_DIR}"
 logFile="/gitRabbit.log"
 confFile="/lapereaux.conf"
 quietMode="false"
