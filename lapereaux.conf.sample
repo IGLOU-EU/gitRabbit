@@ -1,10 +1,23 @@
-#   #* Exemple *
-#   lapereaux+=("exemple") #Declare new child to clone
-#   exemple_url="https://.../exemple.git" #Some child config line
-#   ...
+#	** Exemple **
 #
+#	tinyLog=0
+#	forceUser=""
+#	sleepTime="60"
+#	quietMode="false"
 #
+#	* Repos 1 *
+#	lapereaux+=("repos1")
+#	repos1_url='https://reposgit.com/repos1.git'
+#	repos1_after=''
+#	repos1_before='echo "Repos ${lapinou} go"'
+#	repos1_branch='master'
+#	repos1_remove='true'
 #
+#	* Repos 2 *
+#	lapereaux+=("repos2")
+#	repos2_url='https://reposgit.com/repos2.git'
+#	repos2_branch='prod'
 #
-#
-#
+#	* Repos 3 *
+#	lapereaux+=("repos3")
+#	repos3_remove='true'
