@@ -73,6 +73,44 @@ Permet de ne rien afficher dans la sortie console, ses valeurs sont:
 Est la variable contenant l'intégralité des dépos qu'il faut utiliser,
 le nom donné au repos ne doit contenir que des caractaires alpha-numerique et _ [a-z0-9\_].
 Toutes les variables de configuration suivante doivent étre préfixé, avec le nom ici renségné.
+**ex:** lapereaux+=("mon_repos")
+
+### \*_url
+Pour définir l'emplacement du repos a cloner
+**ex:** toto_url='http(s)://blabla.com/montruc.git'
+
+### \*_after
+La variable utilisé pour définir des actions a définir avant le "git pull",
+il est préférable d'utiliser les quotes simples (') aux doubles (").
+Il est possible d'utiliser des variables du main script, je vous encourage
+a ne pas redéfinir une de ses variable, sous peine de gros problémes:
+- \_lapDir
+- logDir
+- workDir
+- logFile
+- confFile
+
+**ex:** toto_after='mv ${\_lapDir}/conf.ini /tmp/maconfagarder'
+
+
+### \*_before
+Exactement comme la variable précédente, mais aprés le "git pull"
+**ex:** toto_before='mv /tmp/maconfagarder ${\_lapDir}/conf.ini'
+
+
+### \*_branch
+Pour définir la branche a utiliser, histoire de ne pas utiliser master pour la prod,
+**ex:** toto_branch='prod'
+
+
+### \*_remove
+Est utilisé pour supprimer un repos en éditant simplement le fichier de conf
+Attention, une fois supprimé, si vous ne retirez pas les lignes concernant ce
+repos, cela générera une erreur dans les log, expliquant qu'il est impossible
+de le suprimer étant donné qu'il n'existe plus.
+Les valeurs possibles sont **false** ou **true**
+**ex:** toto_remove='true'
+
 
 ### Exemple
 Vous pouvez voir le fichier d'exemple [[ici]](https://git.iglou.eu/Laboratory/gitRabbit/src/branch/master/lapereaux.conf.sample)
