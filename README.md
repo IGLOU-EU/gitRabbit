@@ -92,16 +92,13 @@ a ne pas redéfinir une de ses variable, sous peine de gros problémes:
 
 **ex:** toto_after='mv ${\_lapDir}/conf.ini /tmp/maconfagarder'
 
-
 ### \*_before
 Exactement comme la variable précédente, mais aprés le "git pull"
 **ex:** toto_before='mv /tmp/maconfagarder ${\_lapDir}/conf.ini'
 
-
 ### \*_branch
 Pour définir la branche a utiliser, histoire de ne pas utiliser master pour la prod,
 **ex:** toto_branch='prod'
-
 
 ### \*_remove
 Est utilisé pour supprimer un repos en éditant simplement le fichier de conf
@@ -111,6 +108,11 @@ de le suprimer étant donné qu'il n'existe plus.
 Les valeurs possibles sont **false** ou **true**
 **ex:** toto_remove='true'
 
-
 ### Exemple
 Vous pouvez voir le fichier d'exemple [[ici]](https://git.iglou.eu/Laboratory/gitRabbit/src/branch/master/lapereaux.conf.sample)
+
+## Utilisation en tache CRON
+...
+
+## Utilisation en Service (systemd)
+...
