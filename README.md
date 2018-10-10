@@ -5,7 +5,8 @@
 
 ---
 **gitRabbit**, est un petit script qui permet de déployer des repos git en production, ainsi que de les garder a jour avec leur branche.
-Il embarque un log info/erreur, un garde fou pour restreindre l'execution et un quiet mode.
+Il embarque un log info/erreur, un garde fou pour restreindre l'execution, un quiet mode et une gestion des "trap" 2/3.
+Il est aussi possible de l'utiliser comme service avec systemd (Voir la derniere section de ce README).
 
 **Il est possible:**
 * D'ajouter un nombre ilimité de repos
