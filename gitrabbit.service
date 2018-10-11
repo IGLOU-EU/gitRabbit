@@ -1,0 +1,18 @@
+[Unit]
+Description=gitRabbit
+After=syslog.target
+After=network.target
+
+[Service]
+User=gitrabbit
+Type=forking
+Restart=always
+ExecStart=/usr/local/bin/gitRabbit -c /etc/gitRabbit/lapereaux.conf
+KillSignal=SIGQUIT
+LimitNOFILE=65535
+StandardError=syslog
+WorkingDirectory=/var/lib/gitRabbit/
+Environment=USER=gitrabbit WORK_DIR=/var/lib/gitRabbit
+
+[Install]
+WantedBy=multi-user.target
