@@ -5,10 +5,6 @@
 # SIG TRAP
 trap "quit" 2 3
 
-# TMPCONF
-USER="adrien"
-WORK_DIR="/tmp/gitRabbit"
-
 # FUNCTIONS
 function err() {
     echo "FATAL ERROR: ${1}"
