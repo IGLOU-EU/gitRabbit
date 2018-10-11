@@ -113,7 +113,13 @@ Les valeurs possibles sont **false** ou **true**
 Vous pouvez voir le fichier d'exemple [[ici]](https://git.iglou.eu/Laboratory/gitRabbit/src/branch/master/lapereaux.conf.sample)
 
 ## Utilisation en tache CRON
-...
+Au minimum, la configuration minimale en cron est:
+`@reboot /emplacement/script/gitRabbit -c /emplacement/conf/lapereaux.conf`
 
 ## Utilisation en Service (systemd)
-...
+*C'est je pense la meilleure façon de faire*
+
+1. Création d'un compte utilisateur dédié `useradd -r -s /bin/bash -U -M gitrabbit`
+2. Ajout d'un fichier de configuration `/etc/gitRabbit/lapereaux.conf`
+3. Création de la fiche service [[gitrabbit.service]](https://git.iglou.eu/Laboratory/gitRabbit/raw/branch/master/gitrabbit.service)
+4. Enable/Start `systemctl enable gitrabbit`
