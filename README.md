@@ -17,7 +17,7 @@ Il est aussi possible de l'utiliser comme service avec systemd (Voir la derniere
 * D'utiliser une clé spécifique
 * D'utiliser un combo user/passwd
 
-## Les options de lancement
+## :rocket: Les options de lancement
 ```
     usage : gitRabbit [-q] [-c <path>] [-u <user>] [-w <path>]
                       [-l <path>] [-s <time>] [-t|-tt]
@@ -41,7 +41,7 @@ Il est aussi possible de l'utiliser comme service avec systemd (Voir la derniere
               Doubler l'option(-tt) pour loguer uniquement les erreurs
 ```
 
-## Fichier de configuration
+## :pencil: Fichier de configuration
 *lapereaux.conf*
 Les options suivantes, peuvent étre définies dans le fichier de conf ou en option de lancement(voir section précédente)
 
@@ -112,11 +112,11 @@ Les valeurs possibles sont **false** ou **true**
 ### Exemple
 Vous pouvez voir le fichier d'exemple [[ici]](https://git.iglou.eu/Laboratory/gitRabbit/src/branch/master/lapereaux.conf.sample)
 
-## Utilisation en tache CRON
+## :alarm_clock: Utilisation en tache CRON
 Au minimum, la configuration minimale en cron est:
 `@reboot /emplacement/script/gitRabbit -c /emplacement/conf/lapereaux.conf`
 
-## Utilisation en Service (systemd)
+## :shipit: Utilisation en Service (systemd)
 *C'est je pense la meilleure façon de faire*
 
 1. Création d'un compte utilisateur dédié `useradd -r -s /bin/bash -U -M gitrabbit`
