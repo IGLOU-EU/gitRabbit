@@ -137,7 +137,7 @@ function init_log()
     echo "Log file   : '${logFile}'"         >> "${logFile}"
     echo "---"                               >> "${logFile}"
 
-    if ! $quietMode; then cat "${logFile}"; fi
+    if ! $quietMode; then tail -n6 "${logFile}"; fi
 }
 
 function init_gitRabbit()
