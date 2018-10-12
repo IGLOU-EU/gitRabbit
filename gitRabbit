@@ -289,7 +289,7 @@ function working_loop()
 
 # VARS
 logDir="/log"
-workDir="${WORK_DIR:-/tmp}"
+workDir="${WORK_DIR:-/tmp/gitRabbit}"
 logFile="/gitRabbit.log"
 confFile="/lapereaux.conf"
 
