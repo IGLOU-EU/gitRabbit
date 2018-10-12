@@ -1,3 +1,4 @@
+# /etc/systemd/system/gitrabbit.service
 [Unit]
 Description=gitRabbit
 After=syslog.target
