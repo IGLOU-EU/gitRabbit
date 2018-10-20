@@ -6,7 +6,8 @@
 trap "quit" 2 3
 
 # FUNCTIONS
-function err() {
+function err()
+{
     echo "FATAL ERROR: ${1}"
     exit 1
 }
