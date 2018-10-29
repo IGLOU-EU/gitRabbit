@@ -126,7 +126,7 @@ Au minimum, la configuration en cron est:
 1. Création d'un compte utilisateur dédié `useradd -r -s /bin/bash -U -M gitrabbit`
 2. Ajout d'un fichier de configuration `/etc/gitRabbit/lapereaux.conf` (root:gitrabbit / 740)
 3. Ajout d'un dossier data `/var/lib/gitRabbit` (root:gitrabbit / 775)
-4. Création de la fiche service [[gitrabbit.service]](https://git.iglou.eu/Laboratory/gitRabbit/raw/branch/master/gitrabbit.service)
+4. Création de la fiche service [[gitrabbit.service]](https://git.iglou.eu/Laboratory/gitRabbit/raw/branch/master/gitrabbit.service) *(/etc/systemd/system/gitrabbit.service)*
 5. Enable/Start `systemctl enable gitrabbit`
 
 ## :shipit: Utilisation en Service (systemBSD)
@@ -134,5 +134,5 @@ Au minimum, la configuration en cron est:
 1. Création d'un compte utilisateur dédié `useradd -s /bin/bash gitrabbit`
 2. Ajout d'un fichier de configuration `/etc/gitrabbit/lapereaux.conf` (root:gitrabbit / 740)
 3. Ajout d'un dossier data `/var/gitrabbit` (root:gitrabbit / 775)
-4. Création de la fiche service [[gitrabbitd]](https://git.iglou.eu/Laboratory/gitRabbit/raw/branch/master/gitrabbitd)
+4. Création de la fiche service [[gitrabbitd]](https://git.iglou.eu/Laboratory/gitRabbit/raw/branch/master/gitrabbitd) *(/etc/rc.d/gitrabbitd)*
 5. Enable/Start `rcctl enable gitrabbit`
