@@ -1,0 +1,18 @@
+#!/bin/sh
+
+daemon="/usr/local/bin/gitrabbit"
+daemon_flags="-q -c /etc/gitrabbit/lapereaux.conf -w /var/gitrabbit -u gitrabbit"
+
+daemon_user="gitrabbit"
+
+rc_bg=YES
+rc_reload=NO
+
+. /etc/rc.d/rc.subr
+pexp="/bin/bash ${pexp}"
+
+rc_stop() {
+	pkill -3 -T "${daemon_rtable}" -xf "${pexp}"
+}
+
+rc_cmd $1
