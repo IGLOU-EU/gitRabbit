@@ -14,8 +14,13 @@ Il est aussi possible de l'utiliser comme service avec systemd (Voir la derniere
 * D'executer des commandes avant/aprés un "git pull"
 
 **Il n'est pas encore possible:**
-* D'utiliser une clé spécifique
+* D'utiliser une clé spécifique **(possible via ~/.ssh/config)**
 * D'utiliser un combo user/passwd
+
+**Il à besoin de:**
+* Git
+* Bash
+* *cd echo mkdir sleep exit*
 
 ## :rocket: Les options de lancement
 ```
@@ -113,13 +118,21 @@ Les valeurs possibles sont **false** ou **true**
 Vous pouvez voir le fichier d'exemple [[ici]](https://git.iglou.eu/Laboratory/gitRabbit/src/branch/master/lapereaux.conf.sample)
 
 ## :alarm_clock: Utilisation en tache CRON
-Au minimum, la configuration minimale en cron est:
+Au minimum, la configuration en cron est:
 `@reboot /emplacement/script/gitRabbit -c /emplacement/conf/lapereaux.conf`
 
 ## :shipit: Utilisation en Service (systemd)
-*C'est je pense la meilleure façon de faire*
 
 1. Création d'un compte utilisateur dédié `useradd -r -s /bin/bash -U -M gitrabbit`
-2. Ajout d'un fichier de configuration `/etc/gitRabbit/lapereaux.conf`
-3. Création de la fiche service [[gitrabbit.service]](https://git.iglou.eu/Laboratory/gitRabbit/raw/branch/master/gitrabbit.service)
-4. Enable/Start `systemctl enable gitrabbit`
+2. Ajout d'un fichier de configuration `/etc/gitRabbit/lapereaux.conf` (root:gitrabbit / 740)
+3. Ajout d'un dossier data `/var/lib/gitRabbit` (root:gitrabbit / 775)
+4. Création de la fiche service [[gitrabbit.service]](https://git.iglou.eu/Laboratory/gitRabbit/raw/branch/master/gitrabbit.service)
+5. Enable/Start `systemctl enable gitrabbit`
+
+## :shipit: Utilisation en Service (systemBSD)
+
+1. Création d'un compte utilisateur dédié `useradd -s /bin/bash gitrabbit`
+2. Ajout d'un fichier de configuration `/etc/gitrabbit/lapereaux.conf` (root:gitrabbit / 740)
+3. Ajout d'un dossier data `/var/gitrabbit` (root:gitrabbit / 775)
+4. Création de la fiche service [[gitrabbitd]](https://git.iglou.eu/Laboratory/gitRabbit/raw/branch/master/gitrabbitd)
+5. Enable/Start `rcctl enable gitrabbit`
