@@ -55,6 +55,10 @@ function help()
 
     -l        Specify an alternate log file
 
+    -g        Path for storing all git repository separates from the work tree
+
+    -n        Don't remove the .git file from work tree (from clone)
+
     -s        Time before re-check all repository
 
     -t, -tt   Print less information in log
@@ -68,6 +72,9 @@ function parsing_args()
         case "$1" in
             "-q")
                 quietMode="true"
+                ;;
+            "-n")
+                noGitDot="false"
                 ;;
             "-c")
                 shift
@@ -84,6 +91,10 @@ function parsing_args()
             "-l")
                 shift
                 forceLog="$1"
+                ;;
+            "-g")
+                shift
+                forceGitDir="$1"
                 ;;
             "-s")
                 shift
@@ -143,12 +154,16 @@ function init_log()
 
 function init_gitRabbit()
 {
+    if [[ -z $forceGit ]]; then gitDir="${workDir}${gitDir}"
+    else gitDir="${forceGit}"; forceGit=""; fi
+
     if [[ -z $forceLog ]]; then logDir="${workDir}${logDir}"
     else logDir="${forceLog}"; forceLog=""; fi
 
     if [[ -z $forceConf ]]; then confFile="${workDir}${confFile}"
     else confFile="${forceConf}"; forceConf=""; fi
 
+    init_dir "gitDir"
     init_dir "workDir"
     init_dir "logDir"
 
@@ -156,7 +171,7 @@ function init_gitRabbit()
     init_conf
 
     if [[ ! -z $forceUser ]] && [[ $forceUser != $USER ]]; then
-        err "Expect user '${forceUser}' but current user is: '${USER}'"
+        err "Expect user '${forceUser}' but current user is: '${USER:-null}'"
     fi
 
     init_lapereaux
@@ -186,11 +201,12 @@ function init_lapereaux()
 
     for lapinou in ${lapereaux[@]}
     do
+        export GIT_DIR="${gitDir}/${lapinou}"
         _lapDir="${workDir}/${lapinou}"
 
         _var="${lapinou}_remove"
         if ${!_var:-false}; then
-            _buff="$(rm -rf ${_lapDir} 2>&1)"
+            _buff="$(rm -rf "${_lapDir}" 2>&1)"
             if [ $? -eq 0 ]; then log -1 "Repository '${lapinou}' removed"
             else log 1 "Can't remove '${lapinou}'"; log 1 "${_buff}"; fi
             continue
@@ -205,12 +221,13 @@ function init_lapereaux()
             _buff="-b ${!_var:-master}"
             _var="${lapinou}_url"
             _var="${!_var:-empty_url}"
-            _buff="${_buff} ${_var}"
-            _buff="$(git clone --depth 1 ${_buff} ${_lapDir} 2>&1)"
+            _buff="$(git clone --depth 1 --separate-git-dir "${GIT_DIR}" ${_buff} "${_var}" "${_lapDir}" 2>&1)"
 
             if [ $? -eq 0 ]; then
                 _status=true
                 log -1 "Clone '${lapinou}' repository from '${_var}'"
+
+                if $noGitDot; then rm "${_lapDir}/.git"; fi
             fi
         fi
 
@@ -239,6 +256,8 @@ function lapereaux_check()
 
     for lapinou in ${lapereaux[@]}
     do
+        export GIT_DIR="${gitDir}/${lapinou}"
+
         _lapDir="${workDir}/${lapinou}"
         cd "${_lapDir}"
 
@@ -289,10 +308,12 @@ function working_loop()
 }
 
 # VARS
+gitDir="/git" #
 logDir="/log"
 workDir="${WORK_DIR:-/tmp/gitrabbit}"
 logFile="/gitrabbit.log"
 confFile="/lapereaux.conf"
+noGitDot="true" #
 
 tinyLog=0
 forceUser=""
