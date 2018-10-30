@@ -21,7 +21,6 @@ function quit()
 function log()
 {
     local _buff=""
-    local _logTarg=""
 
     if [ $tinyLog -ne 0 ] && [ $1 -eq 0 ]; then return 0; fi
     if [ $tinyLog -eq 2 ] && [ $1 -eq -1 ]; then return 0; fi
