@@ -39,7 +39,7 @@ function log()
 function help()
 {
     echo "usage : gitrabbit [-q] [-c <path>] [-u <user>] [-w <path>]
-                  [-l <path>] [-s <time>] [-t|-tt]
+                  [-g <parh>] [-n] [-l <path>] [-s <time>] [-t|-tt]
 
     -q        Show information only from fatal error operations
 
