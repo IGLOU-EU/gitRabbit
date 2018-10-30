@@ -8,12 +8,12 @@ After=network.target
 User=gitrabbit
 Type=simple
 Restart=always
-ExecStart=/usr/local/bin/gitRabbit -c /etc/gitRabbit/lapereaux.conf
+ExecStart=/usr/local/bin/gitrabbit -c /etc/gitrabbit/lapereaux.conf
 KillSignal=SIGQUIT
 LimitNOFILE=65535
 StandardError=syslog
-WorkingDirectory=/var/lib/gitRabbit/
-Environment=USER=gitrabbit WORK_DIR=/var/lib/gitRabbit
+WorkingDirectory=/var/lib/gitrabbit/
+Environment=USER=gitrabbit WORK_DIR=/var/lib/gitrabbit
 
 [Install]
 WantedBy=multi-user.target
