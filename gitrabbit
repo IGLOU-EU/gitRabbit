@@ -39,7 +39,7 @@ function log()
 
 function help()
 {
-    echo "usage : gitRabbit [-q] [-c <path>] [-u <user>] [-w <path>]
+    echo "usage : gitrabbit [-q] [-c <path>] [-u <user>] [-w <path>]
                   [-l <path>] [-s <time>] [-t|-tt]
 
     -q        Show information only from fatal error operations
@@ -290,8 +290,8 @@ function working_loop()
 
 # VARS
 logDir="/log"
-workDir="${WORK_DIR:-/tmp/gitRabbit}"
-logFile="/gitRabbit.log"
+workDir="${WORK_DIR:-/tmp/gitrabbit}"
+logFile="/gitrabbit.log"
 confFile="/lapereaux.conf"
 
 tinyLog=0
