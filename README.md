@@ -53,25 +53,25 @@ Il est aussi possible de l'utiliser comme service avec systemd (Voir la derniere
 *Les options suivantes peuvent uniquement étre définies au lancement du script*
 *Ou avant, via des `export .*=".*"`*
 
-### -w WORK_DIR *(workDir)*
+### [-w] WORK_DIR *(workDir)*
 *[DEFAULT: /tmp/gitrabbit]*
 Définit le dossier principale, il est de base de tous le reste,
 si les autres options *(-c -l -g)* ne sont pas définies.
 Il doit étre un lien absolut (de preference) et ouvert en ecriture.
 
-### -c forceConf
+### [-c] forceConf
 *[DEFAULT: \<datas -w>/lapereaux.conf]*
 Permet de forcer un fichier de configuration à un autre emplacement,
 ex: `/etc/gitrabbit/lapereaux.conf`.
 Doit étre un lien absolut et ouvert en lecture.
 
-### -l forceLog
+### [-l] forceLog
 *[DEFAULT: \<datas -w>/log]*
 Pour forcer un dossier de log alternatif comme `/var/log/gitrabbit`,
 il est pratique pour faire de la rotation de log.
 L'emplacement doit étre un lien absolut et ouvert en ecriture.
 
-### -g forceGitDir
+### [-g] forceGitDir
 *[DEFAULT: \<datas -w>/git]*
 Tous les `.git` vont ce retrouver dans ce dossier,
 ça permet de sécuriser les infos contenu en ne les plassant pas dans `work tree`.
