@@ -166,8 +166,8 @@ function init_gitRabbit()
     init_dir "workDir"
     init_dir "logDir"
 
-    init_log
     init_conf
+    init_log
 
     if [[ ! -z $forceUser ]] && [[ $forceUser != $USER ]]; then
         err "Expect user '${forceUser}' but current user is: '${USER:-null}'"
