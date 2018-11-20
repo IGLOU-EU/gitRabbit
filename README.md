@@ -128,7 +128,7 @@ Pour définir l'emplacement du repos a cloner
 Il est possible d'utiliser un repos privé *[https://* **\<user>**:**\<passwd>** *@urldeclone/repos.git]*
 **ex:** toto_url='http(s)://blabla.com/montruc.git'
 
-### \*_after
+### \*_before
 La variable utilisé pour définir des actions a définir avant le "git pull",
 il est préférable d'utiliser les quotes simples (') aux doubles (").
 Il est possible d'utiliser des variables du main script, je vous encourage
@@ -140,8 +140,9 @@ a ne pas redéfinir une de ses variable, sous peine de gros problémes:
 - confFile
 
 **ex:** toto_after='mv ${\_lapDir}/conf.ini /tmp/maconfagarder'
+**ps:** Éxecuté avec `eval` dans le dossier du repos
 
-### \*_before
+### \*_after
 Exactement comme la variable précédente, mais aprés le "git pull"
 **ex:** toto_before='mv /tmp/maconfagarder ${\_lapDir}/conf.ini'
 
