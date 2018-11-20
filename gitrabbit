@@ -153,8 +153,8 @@ function init_log()
 
 function init_gitRabbit()
 {
-    if [[ -z $forceGit ]]; then gitDir="${workDir}${gitDir}"
-    else gitDir="${forceGit}"; forceGit=""; fi
+    if [[ -z $forceGitDir ]]; then gitDir="${workDir}${gitDir}"
+    else gitDir="${forceGitDir}"; forceGitDir=""; fi
 
     if [[ -z $forceLog ]]; then logDir="${workDir}${logDir}"
     else logDir="${forceLog}"; forceLog=""; fi
