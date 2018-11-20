@@ -131,7 +131,7 @@ function init_dir()
         mkdir -p "$_dir"
         return 0
     else
-        err "Unable to write '${_dir#*/}' in '${_buff:-/}'"
+        err "Unable to write '${_dir##*/}' in '${_buff:-/}'"
     fi
 }
 
