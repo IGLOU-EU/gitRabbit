@@ -13,10 +13,10 @@ Il est aussi possible de l'utiliser comme service avec [SystemD](#-utilisation-e
 * D'utiliser des branches
 * D'executer des commandes avant/aprés un "git pull"
 * D'utiliser une clé *[avec ~/.ssh/config]*
+* * D'utiliser un combo user/passwd *[https://**<user>**:**<passwd>**@urldeclone/repos.git]*
 
 **Il n'est pas encore possible:**
 * D'utiliser une clé avec passphrase
-* D'utiliser un combo user/passwd
 
 **Il à besoin de:**
 * Git
@@ -125,6 +125,7 @@ Toutes les variables de configuration suivante doivent étre préfixé, avec le 
 
 ### \*_url
 Pour définir l'emplacement du repos a cloner
+Il est possible d'utiliser un repos privé *[https://**<user>**:**<passwd>**@urldeclone/repos.git]*
 **ex:** toto_url='http(s)://blabla.com/montruc.git'
 
 ### \*_after
