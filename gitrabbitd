@@ -12,7 +12,7 @@ rc_reload=NO
 pexp="/bin/bash ${pexp}"
 
 rc_stop() {
-	pkill -3 -T "${daemon_rtable}" -xf "${pexp}"
+	pkill -3 -T "${daemon_rtable}" -xf "${pexp}" || sleep 10 && pkill -f "${pexp}"
 }
 
 rc_cmd $1
