@@ -287,7 +287,7 @@ function lapereaux_check()
         if [[ ! -z ${!_var} ]]; then eval ${!_var}; fi
 
         if $_status; then
-            log 0 "Repository '${lapinou}' updated"
+            log -1 "Repository '${lapinou}' updated"
         else
             log 1 "Fail to update '${lapinou}' repository"
             log 1 "${_buff}"
