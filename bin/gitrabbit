@@ -22,10 +22,10 @@ function log()
 {
     local _buff=""
 
-    if [ $tinyLog -ne 0 ] && [ $1 -eq 0 ]; then return 0; fi
-    if [ $tinyLog -eq 2 ] && [ $1 -eq -1 ]; then return 0; fi
+    if [ "$tinyLog" -ne 0 ] && [ "$1" -eq 0 ]; then return 0; fi
+    if [ "$tinyLog" -eq 2 ] && [ "$1" -eq -1 ]; then return 0; fi
 
-    if [ $1 -eq 1 ]; then _buff="ERROR"
+    if [ "$1" -eq 1 ]; then _buff="ERROR"
     else _buff="INFO "; fi
 
     _buff="[${_buff}] $(date '+%H%M%S-%d%m%y'): ${2}"
@@ -33,7 +33,7 @@ function log()
     if ! $quietMode; then echo "${_buff}"; fi
     echo "${_buff}" >> "${logFile}"
 
-    return $1
+    return "$1"
 }
 
 function help()
@@ -118,7 +118,7 @@ function parsing_args()
 
 function init_dir()
 {
-    eval $1="${!1%%/}"
+    eval '$1="${!1%%/}"'
     local _dir=${!1}
     local _buff="${_dir%/*}"
 
@@ -169,7 +169,7 @@ function init_gitRabbit()
     init_conf
     init_log
 
-    if [[ ! -z $forceUser ]] && [[ $forceUser != $USER ]]; then
+    if [[ -n $forceUser ]] && [[ $forceUser != "$USER" ]]; then
         err "Expect user '${forceUser}' but current user is: '${USER:-null}'"
     fi
 
@@ -183,6 +183,7 @@ function init_conf()
         else err "Unable to write conf file '${confFile}'"; fi
     fi
 
+    # shellcheck source=/dev/null
     . "$confFile"
     if [ $? -eq 0 ]; then log 0 "Config file sourced '${confFile}'"
     else err "Fail to source '${confFile}'"; fi
@@ -198,7 +199,7 @@ function init_lapereaux()
     local _lapDir=""
     local _checked=()
 
-    for lapinou in ${lapereaux[@]}
+    for lapinou in "${lapereaux[@]}"
     do
         export GIT_DIR="${gitDir}/${lapinou}"
         _lapDir="${workDir}/${lapinou}"
@@ -220,7 +221,7 @@ function init_lapereaux()
             _buff="-b ${!_var:-master}"
             _var="${lapinou}_url"
             _var="${!_var:-empty_url}"
-            _buff="$(git clone --depth 1 --separate-git-dir "${GIT_DIR}" ${_buff} "${_var}" "${_lapDir}" 2>&1)"
+            _buff="$(git clone --depth 1 --separate-git-dir "${GIT_DIR}" "${_buff}" "${_var}" "${_lapDir}" 2>&1)"
 
             if [ $? -eq 0 ]; then
                 _status=true
@@ -253,7 +254,7 @@ function lapereaux_check()
     local _lapDir=""
     local _status=false
 
-    for lapinou in ${lapereaux[@]}
+    for lapinou in "${lapereaux[@]}"
     do
         export GIT_DIR="${gitDir}/${lapinou}"
 
@@ -275,16 +276,16 @@ function lapereaux_check()
         fi
 
         _var="${lapinou}_before"
-        if [[ ! -z ${!_var} ]]; then eval ${!_var}; fi
+        if [[ -n ${!_var} ]]; then eval "${!_var}"; fi
 
         _var="${lapinou}_branch"
         _var="${!_var:-master}"
-        _buff="$(git reset --hard origin/${_var} 2>&1)"
+        _buff="$(git reset --hard origin/"${_var}" 2>&1)"
         if [ $? -eq 0 ]; then _status="true"; fi
         git clean -fd # Don't forget to add datas files to git ignore ...
 
         _var="${lapinou}_after"
-        if [[ ! -z ${!_var} ]]; then eval ${!_var}; fi
+        if [[ -n ${!_var} ]]; then eval ${!_var}; fi
 
         if $_status; then
             log -1 "Repository '${lapinou}' updated"
@@ -302,7 +303,7 @@ function working_loop()
         lapereaux_check
         log 0 "End of a lapereaux turn"
 
-        sleep $sleepTime
+        sleep "$sleepTime"
     done
 }
 
@@ -321,7 +322,7 @@ quietMode="false"
 lapereaux=()
 
 # MAIN
-parsing_args $@
+parsing_args "$@"
 init_gitRabbit
 working_loop
 quit
