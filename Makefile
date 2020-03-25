@@ -2,7 +2,6 @@ APPNAME := gitrabbit
 WHOAMI  := $(shell whoami)
 OS      := $(shell uname 2>/dev/null || echo Unknown)
 
-UADD  ?= useradd -s /sbin/nologin
 UDEL  ?= userdel
 MKDIR ?= mkdir -p
 CHOWN ?= chown
@@ -14,6 +13,7 @@ ETC ?= /etc/$(APPNAME)
 
 ifeq ($(OS),Linux)
 	VAR         ?= /var/lib/gitrabbit
+	UADD        ?= useradd -M -s /sbin/nologin
 	DMN         := /usr/lib/systemd/system/
 	DMN_FILE    := gitrabbit.service
 	DMN_STOP    := systemctl stop
@@ -23,6 +23,7 @@ ifeq ($(OS),Linux)
 endif
 ifeq ($(OS),OpenBSD)
 	VAR         ?= /var/gitrabbit
+	UADD        ?= useradd -s /sbin/nologin
 	DMN         := /etc/rc.d/
 	DMN_FILE    := gitrabbitd
 	DMN_STOP    := rcctl stop
