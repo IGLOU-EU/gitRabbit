@@ -218,10 +218,10 @@ function init_lapereaux()
             if [ $? -eq 0 ]; then _status=true; fi
         else
             _var="${lapinou}_branch"
-            _buff="-b ${!_var:-master}"
+            _buff="--branch=${!_var:-master}"
             _var="${lapinou}_url"
             _var="${!_var:-empty_url}"
-            _buff="$(git clone --depth 1 --separate-git-dir "${GIT_DIR}" "${_buff}" "${_var}" "${_lapDir}" 2>&1)"
+            _buff="$(git clone --depth=1 --recursive --separate-git-dir "${GIT_DIR}" "${_buff}" "${_var}" "${_lapDir}" 2>&1)"
 
             if [ $? -eq 0 ]; then
                 _status=true
